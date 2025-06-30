@@ -1,1 +1,13 @@
 run = "streamlit run main.py --server.port=81 --server.address=0.0.0.0"
+
+[workflows]
+runButton = "Run Streamlit App"
+
+[[workflows.workflow]]
+name = "Run Streamlit App"
+author = 44427251
+mode = "sequential"
+
+[[workflows.workflow.tasks]]
+task = "shell.exec"
+args = "streamlit run main.py --server.port=5000 --server.address=0.0.0.0"
