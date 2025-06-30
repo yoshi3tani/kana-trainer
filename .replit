@@ -1,4 +1,5 @@
-run = "streamlit run main.py --server.port=81 --server.address=0.0.0.0"
+run = "streamlit run main.py --server.port=81 --server.headless true --browser.serverAddress 0.0.0.0"
+modules = ["python-3.11"]
 
 [workflows]
 runButton = "Run Streamlit App"
@@ -10,4 +11,4 @@ mode = "sequential"
 
 [[workflows.workflow.tasks]]
 task = "shell.exec"
-args = "streamlit run main.py --server.port=5000 --server.address=0.0.0.0"
+args = "streamlit run main.py --server.port=81 --server.headless true --browser.serverAddress 0.0.0.0"
