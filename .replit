@@ -12,3 +12,9 @@ mode = "sequential"
 [[workflows.workflow.tasks]]
 task = "shell.exec"
 args = "streamlit run main.py --server.port=81 --server.headless true --browser.serverAddress 0.0.0.0"
+
+[nix]
+
+[[ports]]
+localPort = 81
+externalPort = 80

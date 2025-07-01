@@ -1,4 +1,4 @@
-# Streamlit version: Interactive Kana Pronunciation Trainer (Multilingual UI)
+# Streamlit version: Interactive Kana Pronunciation Trainer (Responsive UI)
 import streamlit as st
 from gtts import gTTS
 import base64
@@ -101,33 +101,33 @@ lang_labels = {
         "youon": "拗音"
     },
     "th": {
-        "title": "??????????????????",
-        "subtitle": "?????????????????????????????????????",
-        "script": "???????????",
-        "dakuten": "????????????????",
-        "basic": "???????????????",
-        "with_dakuten": "???????????????????",
-        "main": "???????????????",
-        "youon": "??????????????"
+        "title": "แอปฝึกการออกเสียงคานะ",
+        "subtitle": "แตะที่ตัวอักษรคานะเพื่อฟังการออกเสียงและดูโรมาจิ",
+        "script": "สคริปต์",
+        "dakuten": "ดะคุเท็น",
+        "basic": "เฉพาะพื้นฐาน",
+        "with_dakuten": "รวมดะคุเท็นด้วย",
+        "main": "ตัวอักษรหลัก",
+        "youon": "เสียงพยางค์รวม"
     }
 }
 
-# --- 言語選択 ---
-lang = st.sidebar.selectbox("Language / 言語 / ????", ["en", "ja", "th"])
+# --- 言語選択を上部中央に配置 ---
+lang = st.selectbox("Language / 言語 / ภาษา", ["en", "ja", "th"], index=0)
 lbl = lang_labels[lang]
 
-# --- UI描画 ---
 st.title(lbl["title"])
 st.write(lbl["subtitle"])
 
 script = st.radio(lbl["script"], ["HIRAGANA", "KATAKANA"])
 dakuten = st.radio(lbl["dakuten"], [lbl["basic"], lbl["with_dakuten"]])
 
+# --- レイアウト調整 ---
 grid = gojuon_dakuten if dakuten == lbl["with_dakuten"] else gojuon_basic
 
 st.subheader(lbl["main"])
 for row in grid:
-    cols = st.columns(5)
+    cols = st.columns(len(row))
     for i, char in enumerate(row):
         if char == "":
             cols[i].markdown(" ")
@@ -141,7 +141,7 @@ for row in grid:
 if dakuten == lbl["with_dakuten"]:
     st.subheader(lbl["youon"])
     for row in youon_filtered:
-        cols = st.columns(5)
+        cols = st.columns(len(row))
         for i, char in enumerate(row):
             if char == "":
                 cols[i].markdown(" ")
