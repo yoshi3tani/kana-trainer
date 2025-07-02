@@ -1,6 +1,6 @@
-### Streamlit version: Interactive Kana Pronunciation Trainer (Responsive UI)
 import streamlit as st
 from gtts import gTTS
+from io import BytesIO
 import base64
 
 # --- ローマ字辞書（正確な表記） ---
@@ -33,6 +33,7 @@ romaji_dict = {
     "りゃ": "rya", "りゅ": "ryu", "りょ": "ryo"
 }
 
+# --- 五十音表 ---
 gojuon_basic = [
     ["あ", "い", "う", "え", "お"],
     ["か", "き", "く", "け", "こ"],
@@ -71,19 +72,15 @@ youon_filtered = [
 def to_katakana(text):
     return ''.join([chr(ord(c) + 0x60) if 'ぁ' <= c <= 'ん' else c for c in text])
 
-"""
 def generate_audio(char):
     tts = gTTS(text=char, lang='ja')
-    tts.save("temp.mp3")
-    with open("temp.mp3", "rb") as f:
-        b64 = base64.b64encode(f.read()).decode()
+    fp = BytesIO()
+    tts.write_to_fp(fp)
+    fp.seek(0)
+    b64 = base64.b64encode(fp.read()).decode()
     return f"<audio autoplay controls src='data:audio/mp3;base64,{b64}'></audio>"
-"""
-# 代わりに仮の文字列を返す（デバッグ目的）
-def generate_audio(char):
-    return "(Audio playback disabled in debug mode)"
 
-# --- 多言語UI辞書 ---
+# --- UI用ラベル ---
 lang_labels = {
     "en": {
         "title": "Interactive Kana Pronunciation Trainer",
@@ -117,7 +114,7 @@ lang_labels = {
     }
 }
 
-# --- 言語選択を上部中央に配置 ---
+# --- 言語UIと設定選択 ---
 lang = st.selectbox("Language / 言語 / ภาษา", ["en", "ja", "th"], index=0)
 lbl = lang_labels[lang]
 
@@ -126,10 +123,9 @@ st.write(lbl["subtitle"])
 
 script = st.radio(lbl["script"], ["HIRAGANA", "KATAKANA"])
 dakuten = st.radio(lbl["dakuten"], [lbl["basic"], lbl["with_dakuten"]])
-
-# --- レイアウト調整 ---
 grid = gojuon_dakuten if dakuten == lbl["with_dakuten"] else gojuon_basic
 
+# --- メイン表の描画 ---
 st.subheader(lbl["main"])
 for row in grid:
     cols = st.columns(len(row))
@@ -143,6 +139,7 @@ for row in grid:
             st.markdown(f"**{char}** → `{romaji}`")
             st.markdown(generate_audio(char), unsafe_allow_html=True)
 
+# --- 拗音の描画 ---
 if dakuten == lbl["with_dakuten"]:
     st.subheader(lbl["youon"])
     for row in youon_filtered:
