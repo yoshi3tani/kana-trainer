@@ -1,4 +1,4 @@
-# Streamlit version: Interactive Kana Pronunciation Trainer (Responsive UI)
+### Streamlit version: Interactive Kana Pronunciation Trainer (Responsive UI)
 import streamlit as st
 from gtts import gTTS
 import base64
