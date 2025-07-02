@@ -71,12 +71,17 @@ youon_filtered = [
 def to_katakana(text):
     return ''.join([chr(ord(c) + 0x60) if 'ぁ' <= c <= 'ん' else c for c in text])
 
+"""
 def generate_audio(char):
     tts = gTTS(text=char, lang='ja')
     tts.save("temp.mp3")
     with open("temp.mp3", "rb") as f:
         b64 = base64.b64encode(f.read()).decode()
     return f"<audio autoplay controls src='data:audio/mp3;base64,{b64}'></audio>"
+"""
+# 代わりに仮の文字列を返す（デバッグ目的）
+def generate_audio(char):
+    return "(Audio playback disabled in debug mode)"
 
 # --- 多言語UI辞書 ---
 lang_labels = {
